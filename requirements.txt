@@ -12,3 +12,5 @@ reportlab
 transformers
 torch
 google-generativeai
+pytesseracCT
+pdf2image

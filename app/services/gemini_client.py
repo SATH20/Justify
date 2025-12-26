@@ -26,30 +26,38 @@ model = genai.GenerativeModel("gemini-2.0-flash")
 
 def generate_llm_response(user_query: str, rag_context: list) -> str:
 
-    # Build legal context
+    # Build legal context for reference (plain text, not structured)
     context_str = "\n".join(
         [
-            f"Law: {item.get('law', '')}\nText: {item.get('text', '')}"
-            for item in rag_context
+            f"{item.get('law', '')}: {item.get('text', '')}".strip()
+            for item in rag_context if item.get('law') or item.get('text')
         ]
     )
 
     prompt = f"""
-You are a legal reasoning assistant.
+You are JusticeLens, a professional and friendly AI legal assistant.
 
-Rules:
-- Use ONLY the provided legal context.
-- Do NOT invent laws or facts.
-- Be neutral and bias-aware.
-- If the context is insufficient, clearly state uncertainty.
+Your job is to help users understand their legal situation in simple terms.
 
-User Query:
+IMPORTANT:
+- Do not show your internal reasoning.
+- Do not list laws mechanically.
+- Do not explain classifications or confidence scores.
+- Speak naturally, like a human legal advisor.
+
+User's situation:
 {user_query}
 
-Legal Context:
+Relevant legal information (for your reference only):
 {context_str}
 
-Provide a clear explanation.
+Write a clear, well-structured response that explains:
+1. What the issue likely is
+2. Whether any law may apply (if relevant)
+3. What the user should do next
+
+Respond in clean paragraphs.
+Do not mention analysis, context, or uncertainty explicitly.
 """
 
     try:
