@@ -8,3 +8,6 @@ pydantic
 python-multipart
 qdrant-client
 sentence-transformers
+reportlab
+transformers
+torch
