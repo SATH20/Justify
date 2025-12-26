@@ -17,6 +17,17 @@ class RAGEngine:
         )
 
     def search_legal_knowledge(self, query: str) -> List[Dict[str, str]]:
+        # Safety: Check if collection exists and is not empty
+        try:
+            collections = self.client.get_collections().collections
+            exists = any(c.name == COLLECTION_NAME for c in collections)
+            if not exists:
+                return []
+            info = self.client.get_collection(COLLECTION_NAME)
+            if hasattr(info, 'points_count') and getattr(info, 'points_count', 0) == 0:
+                return []
+        except Exception:
+            return []
 
         # Convert query to embedding
         query_vector = self.model.encode(query).tolist()
@@ -33,7 +44,7 @@ class RAGEngine:
         for point in response.points:
             results.append(
                 {
-                    "law": point.payload.get("law", "Unknown"),
+                    "law": point.payload.get("law", point.payload.get("name", "Unknown")),
                     "text": point.payload.get("text", "")
                 }
             )
