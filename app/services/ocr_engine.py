@@ -57,7 +57,7 @@ class OCREngine:
             text = pytesseract.image_to_string(proc_img)
             return text.strip()
         except Exception:
-            # Fallback: try raw PIL image
+            
             try:
                 return pytesseract.image_to_string(img).strip()
             except Exception:

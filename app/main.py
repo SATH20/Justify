@@ -1,12 +1,5 @@
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-
-
-
-
-
 from app.routes.classify import router as classify_router
 from app.routes.rag import router as rag_router
 from app.routes.summary import router as summary_router

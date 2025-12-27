@@ -13,7 +13,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 @router.post("/vision/analyze")
 async def analyze_vision(file: UploadFile = File(...)):
     try:
-        # 🔥 READ RAW BYTES (CRITICAL FIX)
+        # READ RAW BYTES (CRITICAL FIX)
         file_bytes = await file.read()
 
         if not file_bytes:
